@@ -7,15 +7,15 @@ STARTING_NUMBERS = 3
 board = [[0] * 9 for n in range(9)]
 solve_board = [[0] * 9 for n in range(9)]
 
-board = [[5,3,0,0,7,0,0,0,0],
-          [6,0,0,1,9,5,0,0,0],
-          [0,9,8,0,0,0,0,6,0],
-          [8,0,0,0,6,0,0,0,3],
-          [4,0,0,8,0,3,0,0,1],
-          [7,0,0,0,2,0,0,0,6],
-          [0,6,0,0,0,0,2,8,0],
-          [0,0,0,4,1,9,0,0,5],
-          [0,0,0,0,8,0,0,7,9]]
+# board = [[5,3,0,0,7,0,0,0,0],
+#           [6,0,0,1,9,5,0,0,0],
+#           [0,9,8,0,0,0,0,6,0],
+#           [8,0,0,0,6,0,0,0,3],
+#           [4,0,0,8,0,3,0,0,1],
+#           [7,0,0,0,2,0,0,0,6],
+#           [0,6,0,0,0,0,2,8,0],
+#           [0,0,0,4,1,9,0,0,5],
+#           [0,0,0,0,8,0,0,7,9]]
 
 #board = [[3,4,0,8,2,6,0,7,1],
 #           [0,0,8,0,0,0,9,0,0],
@@ -28,7 +28,16 @@ board = [[5,3,0,0,7,0,0,0,0],
 #           [4,1,0,3,8,9,0,6,2]]
 given = [[False] * 9 for n in range(9)]
 
-def copy_to_solve_board():
+
+def create_true_board():
+    for x in range(0,9):
+        for y in range(0,9):
+            if(board[x][y] != 0):
+                given[x][y] = True
+            else:
+                given[x][y] = False
+
+def copy_from_solve_board():
     for x in range(0,9):
         for y in range(0,9):
             board[x][y] = solve_board[x][y]
@@ -52,7 +61,7 @@ def generate_full_board():
                     printBoard()
                     print("------------------------------------------------------------------------")
                     break
-                print(f"random number is {number} at {x},{y} ------ Try: {try_count}")
+                #print(f"random number is {number} at {x},{y} ------ Try: {try_count}")
                 #time.sleep(0.5)
                 board[x][y] = number
                 if(checkRules(x, y)):
@@ -73,20 +82,29 @@ def remove_numbers(numbers):
     while(removed < numbers):
         row = random.randint(0,8)
         col = random.randint(0,8)
+        copy_from_solve_board()
         if(not board[row][col] == 0):
-            copy_to_solve_board()
             backup = board[row][col]
             board[row][col] = 0
+            create_true_board()
             if(solve(0,0)):
                 solve_board[row][col] = 0
                 removed = removed + 1
             else:
                 board[row][col] = backup
+
+    print_solve_board()
 ###################################################
 def printBoard():
     for x in range(0,9):
         for y in range(0,9):
             print(board[x][y], end =" ")
+        print("\n")
+
+def print_solve_board():
+    for x in range(0,9):
+        for y in range(0,9):
+            print(solve_board[x][y], end =" ")
         print("\n")
 
 def checkRules(a, b):
@@ -259,11 +277,11 @@ def main():
         print("\n")
 
 if __name__ == "__main__":
-    main()
-    # need_to_generate = True
-    # while(need_to_generate):
-    #     board = [[0] * 9 for n in range(9)]
-    #     need_to_generate = not generate_full_board()
-    # full_board = [[0] * 9 for n in range(9)]
-    # copy_board()
-    # remove_numbers(3)
+    #main()
+    need_to_generate = True
+    while(need_to_generate):
+        board = [[0] * 9 for n in range(9)]
+        need_to_generate = not generate_full_board()
+    full_board = [[0] * 9 for n in range(9)]
+    copy_board()
+    remove_numbers(3)
